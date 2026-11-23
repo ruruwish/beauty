@@ -2,7 +2,7 @@
 
 RuRu 美容體驗班官方網站。
 
-網站：https://ruruofc916.github.io/ruru-beauty-class/
+網站：https://ruruwish.github.io/beauty/
 
 每月場次在 `index.html` 的 `<script>` 最上方 `SESSIONS` 陣列更新。
 
