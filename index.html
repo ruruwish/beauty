@@ -258,6 +258,11 @@ b sup{font-family:var(--en);font-style:italic;font-weight:500;font-size:.62em;co
 .duo h3{font-size:clamp(28px,3vw,38px);margin:4px 0 18px}
 .duo ul{list-style:none;margin:0;padding:0}
 .duo li{display:flex;gap:16px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+.duo li strong{display:block;font-family:var(--display);font-weight:900;font-size:clamp(17px,1.6vw,19px);color:var(--ink)}
+.duo li span{display:block;font-size:14px;color:var(--soft);margin-top:4px;line-height:1.75}
+.duo li{padding:16px 0}
+.bridge{position:relative;z-index:2;margin:clamp(40px,5vw,64px) auto 0;max-width:30em;text-align:center;font-family:var(--display);font-weight:900;font-size:clamp(19px,2vw,25px);line-height:1.75}
+.bridge u{text-decoration:none;background:linear-gradient(transparent 62%,var(--apricot) 62%)}
 .duo li b{font-family:var(--en);font-style:italic;font-weight:500;color:var(--apricot-deep);font-size:18px}
 .duo .plus{align-self:center;justify-self:center;width:clamp(64px,7vw,88px);height:clamp(64px,7vw,88px);border-radius:50%;background:var(--paper);display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:clamp(26px,3vw,34px);color:var(--apricot-deep);line-height:1}
 .statement{position:relative;z-index:2;margin:clamp(50px,6vw,80px) auto 0;max-width:22em;text-align:center;font-family:var(--display);font-weight:900;font-size:clamp(26px,3.6vw,44px);line-height:1.55}
@@ -434,7 +439,7 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="#top">RuRu<small>讓人生茹你所願</small></a>
+    <a class="brand" href="#top">RuRu<small>讓肌膚茹你所願</small></a>
     <nav aria-label="主選單">
       <ul class="menu" id="menu">
         <li><a href="#course">課程</a></li>
@@ -463,8 +468,8 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <p class="lead">保養品買了不少，還是不確定怎麼搭配？來跟 RuRu 一起觀察自己的膚況，從卸妝、清潔到保濕和防曬，親手練一遍，帶走一套回家就能做的保養順序。</p>
         <ul class="facts" aria-label="課程資訊">
           <li><b>台北南港</b></li>
-          <li><b>4–8 人</b>小班</li>
-          <li>約 <b>2 小時</b></li>
+          <li><b>4–8 人小班</b></li>
+          <li><b>約 2 小時</b></li>
         </ul>
         <div class="cta">
           <a class="btn" href="#book">查看場次與預約 <span>→</span></a>
@@ -481,8 +486,8 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
 
   <div class="marquee" aria-hidden="true">
     <div class="track">
-      <span>美容師<em>✦</em>健康管理師<em>✦</em>小班實作<em>✦</em>內服外用<em>✦</em>讓人生茹你所願<em>✦</em></span>
-      <span>美容師<em>✦</em>健康管理師<em>✦</em>小班實作<em>✦</em>內服外用<em>✦</em>讓人生茹你所願<em>✦</em></span>
+      <span>美容師<em>✦</em>健康管理師<em>✦</em>小班實作<em>✦</em>內服外用<em>✦</em>讓肌膚茹你所願<em>✦</em></span>
+      <span>美容師<em>✦</em>健康管理師<em>✦</em>小班實作<em>✦</em>內服外用<em>✦</em>讓肌膚茹你所願<em>✦</em></span>
     </div>
   </div>
 
@@ -573,11 +578,11 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <p>保養品照顧的是表面，肌膚的原料，來自你每天吃進去的東西。</p>
       </div>
       <div class="duo">
-        <div class="side rv"><em>inside</em><h3>內在調養</h3><ul><li><b>01</b>足夠的蛋白質與營養素</li><li><b>02</b>減少高糖飲食</li><li><b>03</b>睡得夠、水喝夠</li></ul></div>
+        <div class="side rv"><em>inside</em><h3>養膚營養指南</h3><ul><li><b>01</b><div><strong>透亮養膚</strong><span>想讓肌膚看起來更有光澤，可以從哪些飲食習慣開始？</span></div></li><li><b>02</b><div><strong>日常抗氧化</strong><span>保養常聽到的「抗氧化」，跟我們每天吃的東西有什麼關係？</span></div></li><li><b>03</b><div><strong>客製化飲食方向</strong><span>常外食、三餐不固定，怎麼把養膚飲食放進自己的生活？</span></div></li></ul></div>
         <div class="plus" aria-hidden="true"><svg viewBox="0 0 120 80" fill="none" stroke="currentColor"><circle cx="44" cy="40" r="30"/><circle cx="76" cy="40" r="30"/></svg></div>
-        <div class="side rv"><em>outside</em><h3>外用保養</h3><ul><li><b>01</b>正確的清潔與保養順序</li><li><b>02</b>選對適合自己膚況的產品</li><li><b>03</b>每天確實防曬</li></ul></div>
+        <div class="side rv"><em>outside</em><h3>客製化保養指南</h3><ul><li><b>01</b><div><strong>看懂自己的膚況</strong><span>洗完臉容易緊繃、下午又容易出油，妳可以先觀察哪些變化？</span></div></li><li><b>02</b><div><strong>整理手邊的保養品</strong><span>化妝台上的瓶瓶罐罐，哪些適合現在的妳？早晚順序和用量怎麼安排？</span></div></li><li><b>03</b><div><strong>親手練一遍</strong><span>跟著美容師練習清潔、保濕和防曬，現場調整用量與手法，回家就知道怎麼做。</span></div></li></ul></div>
       </div>
-      <p class="statement">擦對，讓肌膚<u>今天</u>好看；<br>吃對、睡好，讓肌膚<u>一直</u>好看。</p>
+      <p class="bridge rv">帶著妳最想問的保養問題來。從平常怎麼吃，到手邊的保養品怎麼用，我們一起找出妳<u>回家就能試的第一步</u>。</p>
     </div>
   </section>
 
@@ -590,8 +595,8 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <p>點照片可以放大。每一班都是一群人，一起把保養變簡單。</p>
       </div>
       <div class="gallery" id="gal">
-        <button class="shot g-group rv" type="button" data-cap="熱鬧的一班，謝謝大家一起來玩保養" data-img="images/class-group.jpg"><span class="frame-in"><img src="images/class-group.jpg" alt="學員與講師在產品桌前舉著手牌合照" loading="lazy" style="object-position:50% 40%"></span><span class="lbl"><em>02</em>大合照</span></button>
         <button class="shot g-skin rv" type="button" data-cap="先填膚況問卷，美容師一桌一桌陪你看懂自己的肌膚" data-img="images/class-skin-check.jpg"><span class="frame-in"><img src="images/class-skin-check.jpg" alt="學員填寫膚況問卷，美容師和助教在旁說明" loading="lazy" style="object-position:85% 40%"></span><span class="lbl"><em>01</em>膚況小檢測</span></button>
+        <button class="shot g-group rv" type="button" data-cap="熱鬧的一班，謝謝大家一起來玩保養" data-img="images/class-group.jpg"><span class="frame-in"><img src="images/class-group.jpg" alt="學員與講師在產品桌前舉著手牌合照" loading="lazy" style="object-position:50% 40%"></span><span class="lbl"><em>02</em>大合照</span></button>
         <button class="shot g-toast rv" type="button" data-cap="課程最後，講師們和大家一起舉杯" data-img="images/class-toast.jpg"><span class="frame-in"><img src="images/class-toast.jpg" alt="講師們舉杯合照" loading="lazy" style="object-position:40% 45%"></span><span class="lbl"><em>03</em>一起乾杯</span></button>
         <button class="shot g-home rv" type="button" data-cap="小班結束，大家舉起手牌留下合照" data-img="images/class-home.jpg"><span class="frame-in"><img src="images/class-home.jpg" alt="美容小班結束後的合照" loading="lazy" style="object-position:45% 60%"></span><span class="lbl"><em>04</em>小班合照</span></button>
         <button class="shot g-retinol rv" type="button" data-cap="A 醇保養課，學會基礎保養法與三明治保養法" data-img="images/class-retinol.jpg"><span class="frame-in"><img src="images/class-retinol.jpg" alt="A 醇保養課程結束後的學員合照" loading="lazy" style="object-position:50% 45%"></span><span class="lbl"><em>05</em>A 醇保養課</span></button>
@@ -652,7 +657,7 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
               <label class="opt"><input type="radio" name="ppl" value="1" checked><span class="box"><span class="d">單人</span><span class="chk"></span><span class="m">NT$500</span></span></label>
               <label class="opt"><input type="radio" name="ppl" value="2"><span class="box"><span class="d">雙人同行</span><span class="chk"></span><span class="m">共 NT$600</span></span></label>
             </div>
-            <p class="fee-note">單人 NT$500｜雙人同行共 NT$600。費用含現場準備的保養品，體驗當天無須另購保養品。</p>
+            <p class="fee-note">費用含現場準備的保養品，體驗當天無須另購保養品。</p>
           </fieldset>
         </div>
         <div class="book-right">
@@ -745,7 +750,7 @@ function bookingMessage(s,ppl){
     l.innerHTML='<input type="radio" name="sess"><span class="box"><span class="d"></span><span class="chk"></span><span class="m"></span></span>';
     const inp=l.querySelector('input');inp.value=i;if(first){inp.checked=true;first=false;}
     l.querySelector('.d').textContent=s.date+' '+s.time;if(s.vip){const t=document.createElement('span');t.className='viptag';t.textContent='VIP 優先報名';l.querySelector('.box').insertBefore(t,l.querySelector('.m'));}
-    l.querySelector('.m').textContent=PLACE+'｜單人 NT$500｜雙人同行共 NT$600';
+    l.querySelector('.m').textContent=PLACE;
     list.appendChild(l);
   });
 
