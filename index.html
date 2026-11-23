@@ -251,7 +251,7 @@ b sup{font-family:var(--en);font-style:italic;font-weight:500;font-size:.62em;co
 .creds span{font-size:13px;padding:4px 12px;border:1px solid var(--line);background:var(--pearl)}
 @media (max-width:900px){.about-visual,.about-copy{grid-column:1/-1}.about-visual{max-width:460px;width:100%;margin:0 auto}.about-visual .photos{min-height:0;height:min(120vw,540px)}.story{margin:-6px 0 0}}
 
-/* 帶課團隊 */
+/* 講師陣容 */
 .team{margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}
 .team h3{font-size:18px;margin-bottom:14px}
 .member{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
@@ -352,6 +352,7 @@ b sup{font-family:var(--en);font-style:italic;font-weight:500;font-size:.62em;co
 .voice blockquote{flex:1}
 .voice blockquote{margin:0 0 16px;font-size:15px;line-height:1.9}
 .voice blockquote::before{content:"“";display:block;font-family:var(--en);font-weight:500;font-size:64px;line-height:.5;color:var(--apricot);margin:6px 0 8px -2px}
+.voice mark{background:linear-gradient(transparent 58%,rgba(232,180,150,.45) 58%);color:inherit;font-weight:700;padding:0 1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .voice figcaption{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--soft)}
 .voice figcaption b{color:var(--ink);font-weight:700}
 .more{margin-top:24px;border-top:1px solid var(--line)}
@@ -390,6 +391,13 @@ legend{font-size:13px;letter-spacing:.16em;color:var(--soft);margin-bottom:12px;
 .ppl .box{grid-template-columns:1fr auto}
 .ppl .d{font-size:17px}
 .fee-note{font-size:13px;color:var(--soft);margin-top:10px}
+.concern{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:inline-block;padding:9px 14px;border:1.5px solid var(--line);background:var(--paper);font-size:14px;transition:all .25s}
+.chip input:checked + span{border-color:var(--ink);background:var(--ink);color:var(--pearl)}
+.chip input:focus-visible + span{outline:2px solid var(--apricot-deep);outline-offset:2px}
+legend small{font-size:12px;color:var(--soft);font-weight:500;letter-spacing:0;margin-left:4px}
 .msg-label{font-size:13px;letter-spacing:.16em;color:var(--soft)}
 .msg{margin-top:10px;padding:16px 18px;background:var(--pearl);border-left:3px solid var(--apricot);font-size:16px;line-height:1.8;user-select:all;-webkit-user-select:all}
 .book-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
@@ -566,18 +574,18 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
           <p class="bio">我原本是 UI/UX 設計師，疫情後踏入美業，從美容師做起，一路走到擁有自己的連鎖美容工作室。後來發現很多肌膚問題只靠擦的很難真正改善，就再進修成為國際健康管理師，也和醫師、營養師、健身教練一起成立健康促進中心，累積幫助超過 3000+ 人次。</p><p class="bio"><strong>開這堂課，是因為我看過太多人保養品買了一堆，卻從來沒有人好好教過她怎麼用。</strong>在小班裡，我會先陪妳看懂自己的膚況，再一步步示範，讓妳在自己臉上親手練一遍。哪裡手法不順，我就在旁邊調整，直到妳回家也能自己做。</p>
           <div class="creds"><span>美容丙級證照</span><span>連鎖美容工作室創辦人</span><span>兩張國際健康管理證照</span><span>健康促進中心共同創辦人</span></div>
           <div class="team" id="team">
-            <h3>帶課團隊</h3>
+            <h3>講師陣容</h3>
             <div class="member">
               <span class="av"><img src="images/ruru.jpg" alt=""></span>
-              <div><b>RuRu</b><span class="role">美容小班講師｜國際健康管理師</span></div>
+              <div><b>RuRu</b><span class="role">美容小班講師｜國際健康管理師</span><p>由內而外調理，養成健康美肌</p></div>
             </div>
             <div class="member">
               <span class="av"><img src="images/unice.jpg" alt="" style="object-position:50% 22%"></span>
-              <div><b>Unice</b><span class="role">美容小班講師｜逆齡達人</span></div>
+              <div><b>Unice</b><span class="role">美容小班講師｜逆齡達人</span><p>逆轉時光，打造彈潤肌</p></div>
             </div>
             <div class="member">
-              <span class="av empty" aria-hidden="true">金</span>
-              <div><b>小金</b><span class="role">美容小班講師</span><p>在課堂上一對一看妳的手法，調整按壓方向和用量。</p></div>
+              <span class="av"><img src="images/xiaojin.jpg" alt="" style="object-position:50% 50%"></span>
+              <div><b>小金</b><span class="role">美容小班講師｜業界資深美容師</span><p>專業技術，精準呵護每一寸肌膚</p></div>
             </div>
           </div>
         </div>
@@ -614,7 +622,7 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
       <div class="gallery" id="gal">
         <button class="shot g-skin rv" type="button" data-cap="先填膚況問卷，美容師一桌一桌陪你看懂自己的肌膚" data-img="images/class-skin-check.jpg"><span class="frame-in"><img src="images/class-skin-check.jpg" alt="學員填寫膚況問卷，美容師和助教在旁說明" loading="lazy" style="object-position:85% 40%"></span><span class="lbl"><em>01</em>膚況小檢測</span></button>
         <button class="shot g-group rv" type="button" data-cap="熱鬧的一班，謝謝大家一起來玩保養" data-img="images/class-group.jpg"><span class="frame-in"><img src="images/class-group.jpg" alt="學員與講師在產品桌前舉著手牌合照" loading="lazy" style="object-position:50% 40%"></span><span class="lbl"><em>02</em>大合照</span></button>
-        <button class="shot g-toast rv" type="button" data-cap="課程最後，講師們和大家一起舉杯" data-img="images/class-toast.jpg"><span class="frame-in"><img src="images/class-toast.jpg" alt="講師們舉杯合照" loading="lazy" style="object-position:40% 45%"></span><span class="lbl"><em>03</em>一起乾杯</span></button>
+        <button class="shot g-toast rv" type="button" data-cap="課程最後，講師們和大家一起舉杯" data-img="images/class-toast.jpg"><span class="frame-in"><img src="images/class-toast.jpg" alt="講師們舉杯合照" loading="lazy" style="object-position:75% 45%"></span><span class="lbl"><em>03</em>一起乾杯</span></button>
         <button class="shot g-home rv" type="button" data-cap="小班結束，大家舉起手牌留下合照" data-img="images/class-home.jpg"><span class="frame-in"><img src="images/class-home.jpg" alt="美容小班結束後的合照" loading="lazy" style="object-position:45% 60%"></span><span class="lbl"><em>04</em>小班合照</span></button>
         <button class="shot g-retinol rv" type="button" data-cap="A 醇保養課，學會基礎保養法與三明治保養法" data-img="images/class-retinol.jpg"><span class="frame-in"><img src="images/class-retinol.jpg" alt="A 醇保養課程結束後的學員合照" loading="lazy" style="object-position:50% 45%"></span><span class="lbl"><em>05</em>A 醇保養課</span></button>
         <div class="g-cta rv"><div><em>next class</em><h3>下一班，<br>換你入鏡</h3><p>小班名額有限，想一起來玩保養，現在就預約。</p></div><a class="btn apr" href="#book">預約體驗班 <span>→</span></a></div>
@@ -632,23 +640,23 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <p>每一班結束後，學員在群組裡留下的真心話。</p>
       </div>
       <div class="voices">
-        <figure class="voice rv"><blockquote>更認識了自己的膚質狀況，也發現最近曬傷、曬黑後，肌膚其實比想像中更需要照顧！除了學到日常保養方式，也了解哪些飲食習慣可能會加速皮膚氧化，原來保養不只是擦在臉上，從內到外都很重要。</blockquote><figcaption><b>W 小姐</b>｜夏日養膚・抗糖小班</figcaption></figure>
-        <figure class="voice rv"><blockquote>今天的美容保養體驗很棒，認識了自己的膚質狀況，加上老師們細心的說明跟柔和的指導手勢，讓我更加溫柔對待自己的皮膚！</blockquote><figcaption><b>L 小姐</b>｜美容體驗活動</figcaption></figure>
-        <figure class="voice rv"><blockquote>原本是一個仗著自己年輕有本錢的大學男生，一直不怎麼保養，造成自己帥氣的臉又油又髒。今天來美容保養課程覺得收穫良多，會帶男生朋友持續來學習。</blockquote><figcaption><b>H 先生</b>｜大學生・夏日毛孔清潔小班</figcaption></figure>
+        <figure class="voice rv"><blockquote>更認識了自己的膚質狀況，也發現最近曬傷、曬黑後，肌膚其實比想像中更需要照顧！除了學到日常保養方式，也了解哪些飲食習慣可能會加速皮膚氧化，<mark>原來保養不只是擦在臉上，從內到外都很重要</mark>。</blockquote><figcaption><b>W 小姐</b>｜夏日養膚・抗糖小班</figcaption></figure>
+        <figure class="voice rv"><blockquote>今天的美容保養體驗很棒，認識了自己的膚質狀況，加上老師們細心的說明跟柔和的指導手勢，<mark>讓我更加溫柔對待自己的皮膚</mark>！</blockquote><figcaption><b>L 小姐</b>｜美容體驗活動</figcaption></figure>
+        <figure class="voice rv"><blockquote>原本是一個仗著自己年輕有本錢的大學男生，一直不怎麼保養，造成自己帥氣的臉又油又髒。<mark>今天來美容保養課程覺得收穫良多</mark>，會帶男生朋友持續來學習。</blockquote><figcaption><b>H 先生</b>｜大學生・夏日毛孔清潔小班</figcaption></figure>
       </div>
       <details class="more">
         <summary>看更多學員回饋</summary>
         <div class="voices">
-          <figure class="voice"><blockquote>今天的美容保養活動太厲害了！第一次使用水飛梭，整個鼻子變得很光滑，完全不會有傳統清粉刺的不舒服感覺～還更了解臉部保養跟按摩有多重要！這次的活動真的太值得了，收穫滿滿。</blockquote><figcaption><b>C 小姐</b>｜夏日毛孔清潔小班</figcaption></figure>
-          <figure class="voice"><blockquote>因為平常常常騎車，臉上累積了不少粉刺，今天第一次體驗水飛梭，真的有種讓毛孔重見天日的感覺！做完之後粉刺少了超多，皮膚也更乾淨、更清爽。也學到就算沒有化妝，每天還是要卸妝、擦防曬。謝謝三位老師的專業與協助！</blockquote><figcaption><b>Y 先生</b>｜夏日毛孔清潔小班</figcaption></figure>
-          <figure class="voice"><blockquote>開心！那個美顏飲很好喝，是不是加了氣泡水哈哈哈。我現在臉超級嫩，又很保濕，很讚！</blockquote><figcaption><b>T 小姐</b>｜美容保養活動</figcaption></figure>
-          <figure class="voice"><blockquote>今天的美容課又讓我更了解自己的膚質，並且學到原來保養品的擦拭方法也很重要，看到皮膚變得更透亮好開心。</blockquote><figcaption><b>Z 小姐</b>｜美容體驗活動</figcaption></figure>
-          <figure class="voice"><blockquote>今天參加的夏日毛孔清潔小班真的收穫很多，而且不僅皮膚，營養素吃足後，人都逆齡變透亮了。</blockquote><figcaption><b>S 小姐</b>｜夏日毛孔清潔小班</figcaption></figure>
-          <figure class="voice"><blockquote>今天的美白養膚體驗很開心！感覺皮膚都會呼吸了～謝謝老師們的專業教學，很熱心也很有耐心，很高興跟你們有一個愉快的下午。</blockquote><figcaption><b>K 小姐</b>｜美白養膚小班</figcaption></figure>
-          <figure class="voice"><blockquote>今天來參加得到很多實用的美容知識，活動內容也很精實，老師超大方讓我們試用了很多產品。真的是沒保養樣子老，有保養老樣子，保養好重要呀～</blockquote><figcaption><b>J 先生</b>｜美容保養活動</figcaption></figure>
-          <figure class="voice"><blockquote>老師們教學都非常仔細，也很明顯地看到皮膚的對比，讓我在保養皮膚這門學問又學到了更多。</blockquote><figcaption><b>C 小姐</b>｜美白養膚小班</figcaption></figure>
-          <figure class="voice"><blockquote>學到了很多新知識，接下來會開始重視臉部皮膚的狀況，並把保養這件事列入下半年的待辦清單。</blockquote><figcaption><b>G 先生</b>｜美白養膚小班</figcaption></figure>
-          <figure class="voice"><blockquote>今天小班保養很開心，抗糖、抗氧是課程主體，老師們都很專業地講解，我的肌膚保養完又白了一層，真的很舒服。</blockquote><figcaption><b>H 小姐</b>｜夏日養膚・抗糖小班</figcaption></figure>
+          <figure class="voice"><blockquote>今天的美容保養活動太厲害了！第一次使用水飛梭，<mark>整個鼻子變得很光滑</mark>，完全不會有傳統清粉刺的不舒服感覺～還更了解臉部保養跟按摩有多重要！這次的活動真的太值得了，收穫滿滿。</blockquote><figcaption><b>C 小姐</b>｜夏日毛孔清潔小班</figcaption></figure>
+          <figure class="voice"><blockquote>因為平常常常騎車，臉上累積了不少粉刺，今天第一次體驗水飛梭，真的有種讓毛孔重見天日的感覺！<mark>做完之後粉刺少了超多，皮膚也更乾淨、更清爽</mark>。也學到就算沒有化妝，每天還是要卸妝、擦防曬。謝謝三位老師的專業與協助！</blockquote><figcaption><b>Y 先生</b>｜夏日毛孔清潔小班</figcaption></figure>
+          <figure class="voice"><blockquote>開心！那個美顏飲很好喝，是不是加了氣泡水哈哈哈。<mark>我現在臉超級嫩，又很保濕</mark>，很讚！</blockquote><figcaption><b>T 小姐</b>｜美容保養活動</figcaption></figure>
+          <figure class="voice"><blockquote>今天的美容課又讓我更了解自己的膚質，並且學到<mark>原來保養品的擦拭方法也很重要</mark>，看到皮膚變得更透亮好開心。</blockquote><figcaption><b>Z 小姐</b>｜美容體驗活動</figcaption></figure>
+          <figure class="voice"><blockquote>今天參加的夏日毛孔清潔小班真的收穫很多，而且不僅皮膚，營養素吃足後，<mark>人都逆齡變透亮了</mark>。</blockquote><figcaption><b>S 小姐</b>｜夏日毛孔清潔小班</figcaption></figure>
+          <figure class="voice"><blockquote>今天的美白養膚體驗很開心！<mark>感覺皮膚都會呼吸了</mark>～謝謝老師們的專業教學，很熱心也很有耐心，很高興跟你們有一個愉快的下午。</blockquote><figcaption><b>K 小姐</b>｜美白養膚小班</figcaption></figure>
+          <figure class="voice"><blockquote>今天來參加得到很多實用的美容知識，活動內容也很精實，老師超大方讓我們試用了很多產品。真的是<mark>沒保養樣子老，有保養老樣子</mark>，保養好重要呀～</blockquote><figcaption><b>J 先生</b>｜美容保養活動</figcaption></figure>
+          <figure class="voice"><blockquote>老師們教學都非常仔細，也<mark>很明顯地看到皮膚的對比</mark>，讓我在保養皮膚這門學問又學到了更多。</blockquote><figcaption><b>C 小姐</b>｜美白養膚小班</figcaption></figure>
+          <figure class="voice"><blockquote>學到了很多新知識，<mark>接下來會開始重視臉部皮膚的狀況</mark>，並把保養這件事列入下半年的待辦清單。</blockquote><figcaption><b>G 先生</b>｜美白養膚小班</figcaption></figure>
+          <figure class="voice"><blockquote>今天小班保養很開心，抗糖、抗氧是課程主體，老師們都很專業地講解，<mark>我的肌膚保養完又白了一層</mark>，真的很舒服。</blockquote><figcaption><b>H 小姐</b>｜夏日養膚・抗糖小班</figcaption></figure>
         </div>
       </details>
     </div>
@@ -675,6 +683,10 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
               <label class="opt"><input type="radio" name="ppl" value="2"><span class="box"><span class="d">雙人同行</span><span class="chk"></span><span class="m">共 NT$600</span></span></label>
             </div>
             <p class="fee-note">費用含現場準備的保養品，體驗當天無須另購保養品。</p>
+          </fieldset>
+          <fieldset>
+            <legend>妳最想了解哪個保養問題？<small>（選填）</small></legend>
+            <div class="concern" id="concernList"><label class="chip"><input type="checkbox" name="concern" value="乾燥緊繃"><span>乾燥緊繃</span></label><label class="chip"><input type="checkbox" name="concern" value="出油或毛孔"><span>出油或毛孔</span></label><label class="chip"><input type="checkbox" name="concern" value="暗沉"><span>暗沉</span></label><label class="chip"><input type="checkbox" name="concern" value="保養品搭配"><span>保養品搭配</span></label><label class="chip"><input type="checkbox" name="concern" value="不知道從哪一步開始"><span>不知道從哪一步開始</span></label></div>
           </fieldset>
         </div>
         <div class="book-right">
@@ -752,8 +764,9 @@ const SESSIONS=[
 const PLACE='台北市南港區';
 
 /* 預約訊息：純函式，方便測試 */
-function bookingMessage(s,ppl){
-  return '嗨 RuRu，我想預約 '+s.date+s.time+(s.vip?'（VIP 優先報名）的':' 的')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？';
+function bookingMessage(s,ppl,concerns){
+  return '嗨 RuRu，我想預約 '+s.date+s.time+(s.vip?'（VIP 優先報名）的':' 的')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
+    +(concerns&&concerns.length?'我最想了解的保養問題：'+concerns.join('、')+'。':'');
 }
 
 (function(){
@@ -774,10 +787,11 @@ function bookingMessage(s,ppl){
   const msg=$('msg'),copied=$('copied');
   function update(){
     const si=document.querySelector('input[name="sess"]:checked'),pi=document.querySelector('input[name="ppl"]:checked');
-    msg.textContent=si?bookingMessage(SESSIONS[+si.value],pi.value):'小班';
+    const cs=[...document.querySelectorAll('input[name="concern"]:checked')].map(c=>c.value);
+    msg.textContent=si?bookingMessage(SESSIONS[+si.value],pi.value,cs):'小班';
     copied.textContent='';
   }
-  document.addEventListener('change',e=>{if(e.target.name==='sess'||e.target.name==='ppl')update();});
+  document.addEventListener('change',e=>{if(['sess','ppl','concern'].includes(e.target.name))update();});
   update();
 
   $('copy').addEventListener('click',async()=>{
