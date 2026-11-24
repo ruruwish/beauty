@@ -93,6 +93,12 @@ header.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--p
 .menu a:hover::after,.menu a.on::after{transform:scaleX(1)}
 .nav .btn{padding:9px 18px;font-size:13px}
 .nav-actions{display:flex;align-items:center;gap:10px}
+.lang{height:44px;min-width:44px;padding:0 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.06em;cursor:pointer;transition:border-color .25s,background .25s}
+.lang:hover{border-color:var(--ink);background:#fff}
+.lang:focus-visible{outline:2px solid var(--apricot-deep);outline-offset:2px}
+html[lang="en"] .hero h1{letter-spacing:-.01em;font-size:clamp(42px,min(6vw,10vh),84px)}
+html[lang="en"] .hero h1 .ln{padding-bottom:.18em;margin-bottom:-.1em}
+html[lang="en"] .bio,html[lang="en"] .voice blockquote{line-height:1.75}
 .burger{display:none;width:44px;height:44px;border:1px solid var(--line);background:var(--paper);cursor:pointer;position:relative}
 .burger i{position:absolute;left:12px;right:12px;height:1.5px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s}
 .burger i:nth-child(1){top:16px}.burger i:nth-child(2){top:21px}.burger i:nth-child(3){top:26px}
@@ -475,7 +481,7 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <li><a href="#faq">Q&amp;A</a></li>
       </ul>
     </nav>
-    <div class="nav-actions"><a class="btn" href="#book">查看場次 <span>→</span></a>
+    <div class="nav-actions"><button class="lang" id="langBtn" type="button" lang="en" aria-label="Switch to English">EN</button><a class="btn" href="#book">查看場次 <span>→</span></a>
     <button class="burger" id="burger" type="button" aria-label="開啟選單" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button></div>
   </div>
 </header>
@@ -763,8 +769,20 @@ const SESSIONS=[
 ];
 const PLACE='台北市南港區';
 
+/* 英文版自動換算日期，每月只需改上面的 SESSIONS */
+let LANG='zh';
+const PLACE_EN='Nangang, Taipei';
+function sessDate(s){
+  if(LANG!=='en')return s.date+' '+s.time;
+  const m=s.date.match(/(\d+)\/(\d+)（(.)）/),W={'一':'Mon','二':'Tue','三':'Wed','四':'Thu','五':'Fri','六':'Sat','日':'Sun'},M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=m?W[m[3]]+', '+M[+m[1]-1]+' '+(+m[2]):s.date;
+  const t=s.time.replace(/^(晚上|下午|中午)\s*(.+)$/,'$2 PM').replace(/^(早上|上午)\s*(.+)$/,'$2 AM');
+  return d+' · '+t;
+}
 /* 預約訊息：純函式，方便測試 */
 function bookingMessage(s,ppl,concerns){
+  if(LANG==='en')return 'Hi RuRu, I\'d like to book the beauty class on '+sessDate(s)+(s.vip?' (VIP priority)':'')+' for '+ppl+(ppl=='1'?' person':' people')+'. Are there spots left?'
+    +(concerns&&concerns.length?' The skincare topics I most want to learn about: '+concerns.join(', ')+'.':'');
   return '嗨 RuRu，我想預約 '+s.date+s.time+(s.vip?'（VIP 優先報名）的':' 的')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
     +(concerns&&concerns.length?'我最想了解的保養問題：'+concerns.join('、')+'。':'');
 }
@@ -774,29 +792,35 @@ function bookingMessage(s,ppl,concerns){
   const $=id=>document.getElementById(id);
 
   /* 場次選項 */
-  const list=$('sessList');let first=true;
-  SESSIONS.forEach((s,i)=>{
-    const l=document.createElement('label');l.className='opt';
-    l.innerHTML='<input type="radio" name="sess"><span class="box"><span class="d"></span><span class="chk"></span><span class="m"></span></span>';
-    const inp=l.querySelector('input');inp.value=i;if(first){inp.checked=true;first=false;}
-    l.querySelector('.d').textContent=s.date+' '+s.time;if(s.vip){const t=document.createElement('span');t.className='viptag';t.textContent='VIP 優先報名';l.querySelector('.box').insertBefore(t,l.querySelector('.m'));}
-    l.querySelector('.m').textContent=PLACE;
-    list.appendChild(l);
-  });
+  const list=$('sessList');
+  function renderSess(){
+    const cur=document.querySelector('input[name="sess"]:checked');const ci=cur?+cur.value:0;
+    list.innerHTML='';
+    SESSIONS.forEach((s,i)=>{
+      const l=document.createElement('label');l.className='opt';
+      l.innerHTML='<input type="radio" name="sess"><span class="box"><span class="d"></span><span class="chk"></span><span class="m"></span></span>';
+      const inp=l.querySelector('input');inp.value=i;if(i===ci)inp.checked=true;
+      l.querySelector('.d').textContent=sessDate(s);if(s.vip){const t=document.createElement('span');t.className='viptag';t.textContent=LANG==='en'?'VIP priority':'VIP 優先報名';l.querySelector('.box').insertBefore(t,l.querySelector('.m'));}
+      l.querySelector('.m').textContent=LANG==='en'?PLACE_EN:PLACE;
+      list.appendChild(l);
+    });
+  }
+  renderSess();
 
   const msg=$('msg'),copied=$('copied');
   function update(){
     const si=document.querySelector('input[name="sess"]:checked'),pi=document.querySelector('input[name="ppl"]:checked');
-    const cs=[...document.querySelectorAll('input[name="concern"]:checked')].map(c=>c.value);
-    msg.textContent=si?bookingMessage(SESSIONS[+si.value],pi.value,cs):'小班';
+    const cs=[...document.querySelectorAll('input[name="concern"]:checked')].map(c=>c.nextElementSibling.textContent);
+    msg.textContent=si?bookingMessage(SESSIONS[+si.value],pi.value,cs):'';
     copied.textContent='';
   }
   document.addEventListener('change',e=>{if(['sess','ppl','concern'].includes(e.target.name))update();});
   update();
+  window.__bookRefresh=()=>{renderSess();update();};
 
   $('copy').addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(msg.textContent);copied.textContent='已複製，請貼到 IG 私訊送出';}
-    catch(_){const r=document.createRange();r.selectNodeContents(msg);const s=getSelection();s.removeAllRanges();s.addRange(r);msg.focus();copied.textContent='無法自動複製，訊息已選取，請長按或按 Ctrl+C 複製';}
+    try{await navigator.clipboard.writeText(msg.textContent);copied.textContent=LANG==='en'?'Copied! Paste it into an Instagram DM to send.':'已複製，請貼到 IG 私訊送出';}
+    catch(_){const r=document.createRange();r.selectNodeContents(msg);const s=getSelection();s.removeAllRanges();s.addRange(r);msg.focus();copied.textContent=LANG==='en'?'Couldn\'t copy automatically. The message is selected; long-press or press Ctrl+C to copy.':'無法自動複製，訊息已選取，請長按或按 Ctrl+C 複製';}
   });
 
 
@@ -814,7 +838,7 @@ function bookingMessage(s,ppl,concerns){
 
   /* 手機選單 */
   const burger=$('burger'),menu=$('menu');
-  burger.addEventListener('click',()=>{const o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o);burger.setAttribute('aria-label',o?'關閉選單':'開啟選單');});
+  burger.addEventListener('click',()=>{const o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o);burger.setAttribute('aria-label',LANG==='en'?(o?'Close menu':'Open menu'):(o?'關閉選單':'開啟選單'));});
   menu.addEventListener('click',e=>{if(e.target.closest('a')){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');}});
 
   if('IntersectionObserver' in window){
@@ -842,6 +866,132 @@ function bookingMessage(s,ppl,concerns){
   lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb();});
 
+})();
+</script>
+<script>
+/* ===== 中英切換：英文翻譯都在這裡 ===== */
+(function(){
+const A='<span>→</span>';
+const EN=[
+ ['.brand small','Skin, just as you wish'],
+ ['#menu a',['Course','About RuRu','Gallery','Reviews','Book','FAQ']],
+ ['.nav-actions .btn','See dates '+A],
+ ['#mcta','See dates &amp; book '+A],
+ ['.hero .issue b','RuRu Beauty Class'],
+ ['.hero h1','<span class="ln"><span>Want to glow?</span></span><span class="ln"><span>Start <span class="acc">here</span>.</span></span>'],
+ ['.hero .lead','Own plenty of skincare but not sure how to put it together? Come read your skin with RuRu, practise every step yourself, from makeup removal and cleansing to moisturising and sunscreen, and leave with a routine you can actually do at home.'],
+ ['.facts b',['Nangang, Taipei','4–8 per class','About 2 hours']],
+ ['.hero .cta .btn',['See dates &amp; book '+A,'What you\'ll learn']],
+ ['.p2 .cap','Small class'],
+ ['.marquee .track>span',['Beautician<em>✦</em>Health manager<em>✦</em>Hands-on class<em>✦</em>Inside &amp; out<em>✦</em>Skin, just as you wish<em>✦</em>','Beautician<em>✦</em>Health manager<em>✦</em>Hands-on class<em>✦</em>Inside &amp; out<em>✦</em>Skin, just as you wish<em>✦</em>']],
+ ['#fit .issue span','Who it\'s for'],
+ ['#fit h2','Sound like you?<br>This class is for you'],
+ ['#fit .head p','If even one of these fits, you\'ll feel at home in our small class.'],
+ ['.fit h3',['Lots of products, no idea how to pair them','Want to start, don\'t know where','Dullness and dryness keep coming back','Want your healthy glow back']],
+ ['.fit p',['Your shelf is full, but the order and amounts are a guess.','There\'s so much advice online it only gets more confusing.','You use plenty, yet your skin barely changes.','You know diet and sleep matter, just not how to adjust them.']],
+ ['#course .issue span','The class'],
+ ['#course h2','Two hours,<br><span class="acc">three</span> takeaways'],
+ ['#course .oneline','A small class where a beautician guides you step by step, and everyone gets hands-on.'],
+ ['.three h3',['Get to know<br>your skin','Practise<br>each step','Take home<br>a daily routine']],
+ ['.three p',['A quick skin check first: the beautician helps you tell whether you\'re dry, oily, combination or sensitive, and what needs care most right now.','The beautician demonstrates each step; you use the products we prepare, from makeup removal and cleansing to moisturiser and sunscreen, on your own face, with your technique adjusted on the spot.','We map out the steps and amounts that suit your skin type, so you can follow them at home with no more guessing which bottle comes first.']],
+ ['#about .issue span','About RuRu'],
+ ['#about h2','I\'m RuRu,<br>let\'s make skincare simple'],
+ ['.a2 .cap','Earning my beautician licence, a new skill'],
+ ['.milestones span',['Moved to Taipei, started a side business','Side business went full-time']],
+ ['.bio',['I started out as a UI/UX designer and entered the beauty industry after the pandemic, beginning as a beautician and going on to run my own chain of beauty studios. I found that many skin problems can\'t truly improve with topical care alone, so I trained as an international health manager and co-founded a health promotion centre with doctors, dietitians and fitness coaches, serving more than 3,000 sessions so far.','<strong>I started this class because I\'ve seen so many people buy piles of skincare without anyone ever showing them how to use it.</strong> In class I\'ll first help you understand your skin, then demonstrate each step so you can practise on your own face. If a technique feels off, I\'ll adjust it with you until you can do it on your own at home.']],
+ ['.creds span',['Beautician licence (Level C)','Founder of a beauty studio chain','Two international health management certifications','Co-founder of a health promotion centre']],
+ ['#team h3','Our instructors'],
+ ['#team .member b',['RuRu','Unice','Jin']],
+ ['#team .role',['Beauty class instructor｜International health manager','Beauty class instructor｜Age-defying expert','Beauty class instructor｜Senior beautician']],
+ ['#team .member p',['Nourish from within for healthy, beautiful skin','Turn back time for bouncy, supple skin','Expert technique, precise care for every inch of skin']],
+ ['#care .issue span','Our philosophy'],
+ ['#care h2','Inside and out,<br>that\'s complete skincare'],
+ ['#care .head p','Skincare products care for the surface; the building blocks of your skin come from what you eat every day.'],
+ ['.duo h3',['Skin nutrition guide','Personalised skincare guide']],
+ ['.duo strong',['Radiant skin','Everyday antioxidants','A diet that fits you','Read your skin','Sort your products','Practise it yourself']],
+ ['.duo li span',['Want a healthier glow? Which eating habits are a good place to start?','You often hear \"antioxidants\" in skincare. How do they relate to what you eat?','Eat out a lot or skip meals? How can skin-friendly eating fit your life?','Tight after cleansing, shiny by afternoon? What changes should you watch for first?','Which products on your shelf suit you now? How should you order and dose them morning and night?','Practise cleansing, moisturising and sunscreen with a beautician, adjusting amount and technique on the spot, so you know exactly what to do at home.']],
+ ['.bridge','Bring the skincare question you most want answered. From how you eat to how you use the products you already have, we\'ll find <u>the first step you can try at home</u>.'],
+ ['#gallery .issue span','Gallery'],
+ ['#gallery h2','A day in<br>our <span class="acc">class</span>'],
+ ['#gallery .head p','Tap a photo to enlarge. Every class is a group of people making skincare simple together.'],
+ ['.shot .lbl',['<em>01</em>Skin check','<em>02</em>Group photo','<em>03</em>Cheers','<em>04</em>Class photo','<em>05</em>Retinol class']],
+ ['.g-cta h3','Next class,<br>it\'s your turn'],
+ ['.g-cta p','Spots are limited. Want to join the fun? Book now.'],
+ ['.g-cta .btn','Book a class '+A],
+ ['.gal-hint','← Swipe for more photos →'],
+ ['#voices .issue span','Reviews'],
+ ['#voices h2','After class,<br>here\'s what they said'],
+ ['#voices .head p','Honest words students left in our group chat after each class.'],
+ ['.voice blockquote',[
+  'I got to know my skin type, and realised that after recent sunburn and tanning my skin needed far more care than I thought! Besides learning a daily routine, I found out which eating habits can speed up skin oxidation. <mark>Skincare isn\'t just what you put on your face; inside and out both matter</mark>.',
+  'Today\'s skincare experience was great. I learned about my skin type, and with the teachers\' careful explanations and gentle hand guidance, <mark>I\'ll treat my skin more gently from now on</mark>!',
+  'I was a university guy who relied on being young and never really looked after my skin, so my handsome face got oily and grimy. <mark>I got so much out of today\'s class</mark>, and I\'ll bring my guy friends to keep learning.',
+  'Today\'s session was amazing! My first time trying a hydrafacial, and <mark>my whole nose turned so smooth</mark>, with none of the discomfort of traditional extractions. I also learned how important facial care and massage are. Totally worth it!',
+  'I ride a scooter a lot, so I had plenty of blackheads. Trying a hydrafacial for the first time, it felt like my pores could finally breathe! <mark>Way fewer blackheads afterwards, and my skin feels cleaner and fresher</mark>. I also learned to remove makeup and apply sunscreen every day, even without makeup. Thank you, all three teachers!',
+  'So happy! That beauty drink was delicious, was there sparkling water in it? Haha. <mark>My face feels super soft and hydrated now</mark>. Love it!',
+  'Today\'s class helped me understand my skin even better, and I learned that <mark>how you apply skincare matters too</mark>. So happy to see my skin look brighter.',
+  'I got so much out of the summer pore-cleansing class, and not just for my skin: with the right nutrients, <mark>I look younger and more radiant</mark>.',
+  'Loved today\'s brightening session! <mark>My skin feels like it can breathe again</mark>. Thank you, teachers, for your expert, warm and patient teaching. It was a lovely afternoon with you.',
+  'I picked up lots of practical beauty knowledge, the content was packed, and the teachers generously let us try many products. As they say, <mark>skip skincare and you look old; keep it up and you stay the same</mark>. Skincare matters!',
+  'The teachers explained everything carefully, and <mark>I could clearly see the before-and-after difference in my skin</mark>. I learned even more about caring for my skin.',
+  'I learned a lot of new things. <mark>From now on I\'ll start paying attention to my facial skin</mark> and put skincare on my to-do list for the second half of the year.',
+  'I enjoyed today\'s small class. Anti-glycation and antioxidants were the focus, the teachers explained them expertly, and <mark>my skin looked a shade brighter afterwards</mark>. It felt so good.']],
+ ['.voice figcaption',['<b>Ms. W</b>｜Summer skin &amp; anti-glycation class','<b>Ms. L</b>｜Beauty experience event','<b>Mr. H</b>｜University student・Summer pore-cleansing class','<b>Ms. C</b>｜Summer pore-cleansing class','<b>Mr. Y</b>｜Summer pore-cleansing class','<b>Ms. T</b>｜Skincare event','<b>Ms. Z</b>｜Beauty experience event','<b>Ms. S</b>｜Summer pore-cleansing class','<b>Ms. K</b>｜Brightening class','<b>Mr. J</b>｜Skincare event','<b>Ms. C</b>｜Brightening class','<b>Mr. G</b>｜Brightening class','<b>Ms. H</b>｜Summer skin &amp; anti-glycation class']],
+ ['.more summary','See more reviews'],
+ ['#book .issue span','Dates &amp; booking'],
+ ['#book h2','Pick a date,<br>then DM RuRu to book'],
+ ['#book .oneline','Classes are in Nangang, Taipei; the exact address is sent once you\'re confirmed. 4–8 people per class.'],
+ ['#book legend',['Choose a date','Number of people','Which skincare topic interests you most? <small>(optional)</small>']],
+ ['.ppl .d',['Solo','Bring a friend']],
+ ['.ppl .m',['NT$500','NT$600 for two']],
+ ['.fee-note','Includes all the skincare products used on the day; no purchase needed.'],
+ ['.chip span',['Dryness &amp; tightness','Oiliness or pores','Dullness','Pairing products','Not sure where to start']],
+ ['.msg-label','Your booking message'],
+ ['.howto','Copy this message, then paste and send it in an Instagram DM.'],
+ ['#copy','Copy booking message'],
+ ['.book-btns a','DM on Instagram '+A],
+ ['.confirm','Your spot is booked once RuRu replies to confirm.'],
+ ['.dm','Not sure about the date yet?<br><a class="ask" href="https://ig.me/m/qqeee_i" target="_blank" rel="noopener">Ask about the next class on IG →</a>'],
+ ['#faq .issue span','FAQ'],
+ ['#faq h2','Before you book, you might ask'],
+ ['.faq summary',['I have no skincare routine at all. Can I still join?','Do I need to bring products? Should I come bare-faced?','Do I have to buy anything?','Can two of us sign up together?','What is VIP priority booking?','After the class, can I book a one-on-one consultation?']],
+ ['.faq p',['Yes, this class starts from zero. We begin with basics like makeup removal and cleansing, and help you build a simple routine you can stick to.','No need. We prepare all the products, and you won\'t need to buy any on the day. Wearing makeup is fine; the first step is removing it.','No. We\'ll introduce products for different skin types, and you can buy if you like. There\'s no minimum purchase.','Yes: NT$500 solo, or NT$600 for two. Choose \"Bring a friend\" when booking and the message will include the number of people.','VIP sessions reserve spots for VIP students first. Other students can still sign up, and RuRu will confirm based on availability.','Yes. After the class you can book a one-on-one skin consultation to find what\'s behind dullness or dryness, with advice on skincare, diet and daily habits.']],
+ ['.ft-tag','Beauty class instructor｜International health manager'],
+ ['.ft-line','Making skincare simple, so you can live the way you love, from beauty and health to life\'s choices.'],
+ ['.ft-h',['Explore','Book &amp; contact']],
+ ['footer nav.ft-col a',['The class','About RuRu','Gallery','Reviews','FAQ']],
+ ['.ft-loc','Nangang, Taipei｜4–8 per class'],
+ ['.ft-col .btn','See dates &amp; book '+A],
+ ['.ft-bottom p',['This class shares skincare and healthy-living ideas and is not a substitute for medical diagnosis or treatment. If you have a skin condition or feel unwell, please consult a doctor.','© 2026 茹我所願｜RuRu']]
+];
+const CAPS_EN=['Students fill in a skin questionnaire while beauticians go table by table to help','A lively class, thanks for joining us','At the end of class, the instructors raise a toast with everyone','Class over: everyone holds up their signs for a photo','Retinol class: learning the basic and \"sandwich\" methods'];
+const zh=new Map(),zhCap=new Map();
+function apply(lang){
+  LANG=lang;
+  document.documentElement.lang=lang==='en'?'en':'zh-Hant';
+  EN.forEach(([sel,val])=>{
+    const els=[...document.querySelectorAll(sel)];
+    els.forEach((el,i)=>{
+      const v=Array.isArray(val)?val[i]:val;if(v===undefined)return;
+      if(!zh.has(el))zh.set(el,el.innerHTML);
+      el.innerHTML=lang==='en'?v:zh.get(el);
+    });
+  });
+  document.querySelectorAll('.shot').forEach((el,i)=>{
+    if(!zhCap.has(el))zhCap.set(el,el.dataset.cap);
+    el.dataset.cap=lang==='en'&&CAPS_EN[i]?CAPS_EN[i]:zhCap.get(el);
+  });
+  const b=document.getElementById('langBtn');
+  b.textContent=lang==='en'?'中文':'EN';
+  b.lang=lang==='en'?'zh-Hant':'en';
+  b.setAttribute('aria-label',lang==='en'?'切換成中文':'Switch to English');
+  if(window.__bookRefresh)window.__bookRefresh();
+  try{localStorage.setItem('ruru-lang',lang);}catch(_){}
+}
+document.getElementById('langBtn').addEventListener('click',()=>apply(LANG==='en'?'zh':'en'));
+let start='zh';
+try{start=new URLSearchParams(location.search).get('lang')||localStorage.getItem('ruru-lang')||'zh';}catch(_){}
+if(start==='en')apply('en');
 })();
 </script>
 </body>
