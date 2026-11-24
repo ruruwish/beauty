@@ -354,6 +354,30 @@ b sup{font-family:var(--en);font-style:italic;font-weight:500;font-size:.62em;co
 
 /* 學員回饋 */
 .voices{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.2vw,28px);align-items:stretch}
+.vwall{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,36px);margin-bottom:clamp(32px,4vw,48px)}
+.vitem{margin:0;display:flex;flex-direction:column}
+.vcard{position:relative;aspect-ratio:9/16;background:var(--ink);border:7px solid #fff;box-shadow:0 18px 40px -18px rgba(60,40,30,.35)}
+.vitem:nth-child(1) .vcard{rotate:-1.2deg}.vitem:nth-child(2) .vcard{rotate:.8deg}.vitem:nth-child(3) .vcard{rotate:-.6deg}
+.vcard video{width:100%;height:100%;object-fit:cover;display:block;background:var(--ink)}
+.vplay{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);width:60px;height:60px;border-radius:50%;border:none;background:rgba(253,250,246,.92);cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);transition:transform .25s}
+.vplay:hover{transform:translateX(-50%) scale(1.06)}
+.vplay span{width:0;height:0;border-left:18px solid var(--apricot-deep);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px}
+.vcard.playing .vplay{display:none}
+.vitem figcaption{display:flex;flex-direction:column;flex:1;padding-top:20px}
+.vtag{align-self:flex-start;font-size:12px;letter-spacing:.14em;background:var(--ink);color:var(--pearl);padding:3px 10px}
+.vq{font-size:15px;line-height:1.9;margin:12px 0 14px}
+.vq mark{background:linear-gradient(transparent 58%,rgba(232,180,150,.45) 58%);color:inherit;font-weight:700;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.vname{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--soft)}
+.vhint{display:none}
+.vmore{margin:0 0 clamp(40px,5vw,64px)}
+.vmore .vwall{margin:24px 0 0}
+@media (max-width:760px){
+  .vwall{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:0 calc(-1*18px) 12px;padding:6px 18px 10px;scrollbar-width:none}
+  .vwall::-webkit-scrollbar{display:none}
+  .vitem{flex:0 0 72%;scroll-snap-align:center}
+  .vhint{display:block;margin:0 0 8px}
+  .vmore .vwall{margin:20px -18px 0}
+}
 .voice{background:var(--paper);border:1px solid var(--line);padding:26px 24px;margin:0;display:flex;flex-direction:column}
 .voice blockquote{flex:1}
 .voice blockquote{margin:0 0 16px;font-size:15px;line-height:1.9}
@@ -645,6 +669,50 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
         <h2>上完課，<br>學員這樣說</h2>
         <p>每一班結束後，學員在群組裡留下的真心話。</p>
       </div>
+      <div class="vwall">
+        <figure class="vitem rv">
+          <div class="vcard"><video src="videos/voice-k.mp4" poster="images/voice-k-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">專程從金門來</span><p class="vq">原本皮膚太乾，參加完<mark>保濕狀況好很多</mark>。整個過程很放鬆、很舒服，好東西就要跟好朋友分享。</p><p class="vname"><b>金門 K 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem rv">
+          <div class="vcard"><video src="videos/voice-b.mp4" poster="images/voice-b-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">沒有推銷壓力</span><p class="vq">以前不知道回到家就算有化妝，也要好好卸妝保養，這次都學到了。<mark>整個過程很舒服、很貼心</mark>，沒有強迫的感覺，可以自己感受產品效果再決定。</p><p class="vname"><b>B 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem rv">
+          <div class="vcard"><video src="videos/voice-d.mp4" poster="images/voice-d-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">兩邊臉不一樣</span><p class="vq">印象最深的是擦了 A 醇、按摩之後，<mark>兩邊臉就不一樣</mark>，線條輪廓跑出來，法令紋也比較不明顯。會推薦朋友來，花少少的錢得到最好的效果。</p><p class="vname"><b>D 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+      </div>
+      <p class="gal-hint vhint">← 左右滑動看更多影片 →</p>
+      <details class="more vmore">
+        <summary>看更多影片回饋</summary>
+        <div class="vwall">
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-a.mp4" poster="images/voice-a-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">第一次參加</span><p class="vq">學到很多保養新知，也更認識自己的肌膚。老師講得很認真，<mark>美容師也很細心照顧每個人</mark>，會推薦朋友一起來。</p><p class="vname"><b>A 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-f.mp4" poster="images/voice-f-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">實用美容知識</span><p class="vq">學到非常多實用的美容小知識，老師很大方，讓我們用到很多時下最新、天然的好產品，<mark>變漂亮好開心</mark>，下次還要來！</p><p class="vname"><b>F 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-e.mp4" poster="images/voice-e-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">皮膚變亮白</span><p class="vq">原本皮膚比較暗沉，做完整個流程之後<mark>比較亮白</mark>，也學到熬夜之後要怎麼保養。有機會還想再來，也會帶朋友一起來。</p><p class="vname"><b>E 小姐</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-m.mp4" poster="images/voice-m-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">男生也適合</span><p class="vq">擦完保養品，<mark>肌膚變得非常滑順、有彈性</mark>。在家花一樣的錢隨便擦，跟在這裡學到正確步驟，真的不一樣。</p><p class="vname"><b>M 先生</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-n.mp4" poster="images/voice-n-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">第二次來</span><p class="vq">平常不會保養，但很在意別人的眼光，想帶男生朋友來學怎麼照顧臉。<mark>除了學保養，CP 值很高</mark>，內外調理都有教。</p><p class="vname"><b>N 先生</b>｜美容體驗班</p></figcaption>
+        </figure>
+        <figure class="vitem">
+          <div class="vcard"><video src="videos/voice-p.mp4" poster="images/voice-p-poster.jpg" preload="none" playsinline aria-label="學員影片回饋"></video><button class="vplay" type="button" aria-label="播放影片"><span></span></button></div>
+          <figcaption><span class="vtag">原來不用那麼大力</span><p class="vq">從卸妝、面膜到乳液做完，<mark>右邊整個超級滑順</mark>，沒擦的左邊阻力比較大。原來保養不用那麼用力，輕輕帶過就好。</p><p class="vname"><b>P 先生</b>｜美容體驗班</p></figcaption>
+        </figure>
+        </div>
+      </details>
       <div class="voices">
         <figure class="voice rv"><blockquote>更認識了自己的膚質狀況，也發現最近曬傷、曬黑後，肌膚其實比想像中更需要照顧！除了學到日常保養方式，也了解哪些飲食習慣可能會加速皮膚氧化，<mark>原來保養不只是擦在臉上，從內到外都很重要</mark>。</blockquote><figcaption><b>W 小姐</b>｜夏日養膚・抗糖小班</figcaption></figure>
         <figure class="voice rv"><blockquote>今天的美容保養體驗很棒，認識了自己的膚質狀況，加上老師們細心的說明跟柔和的指導手勢，<mark>讓我更加溫柔對待自己的皮膚</mark>！</blockquote><figcaption><b>L 小姐</b>｜美容體驗活動</figcaption></figure>
@@ -824,6 +892,11 @@ function bookingMessage(s,ppl,concerns){
   });
 
 
+  /* 影片回饋 */
+  document.querySelectorAll('.vcard').forEach(c=>{const v=c.querySelector('video');
+    c.querySelector('.vplay').addEventListener('click',()=>{v.play();});
+    v.addEventListener('play',()=>{c.classList.add('playing');v.controls=true;document.querySelectorAll('.vcard video').forEach(o=>{if(o!==v)o.pause();});});});
+
   /* 進度條 */
   const bar=document.querySelector('.progress');let ticking=false;
   function prog(){const h=document.documentElement.scrollHeight-innerHeight;bar.style.transform='scaleX('+(h>0?Math.min(1,scrollY/h):0)+')';ticking=false;}
@@ -937,7 +1010,19 @@ const EN=[
   'I learned a lot of new things. <mark>From now on I\'ll start paying attention to my facial skin</mark> and put skincare on my to-do list for the second half of the year.',
   'I enjoyed today\'s small class. Anti-glycation and antioxidants were the focus, the teachers explained them expertly, and <mark>my skin looked a shade brighter afterwards</mark>. It felt so good.']],
  ['.voice figcaption',['<b>Ms. W</b>｜Summer skin &amp; anti-glycation class','<b>Ms. L</b>｜Beauty experience event','<b>Mr. H</b>｜University student・Summer pore-cleansing class','<b>Ms. C</b>｜Summer pore-cleansing class','<b>Mr. Y</b>｜Summer pore-cleansing class','<b>Ms. T</b>｜Skincare event','<b>Ms. Z</b>｜Beauty experience event','<b>Ms. S</b>｜Summer pore-cleansing class','<b>Ms. K</b>｜Brightening class','<b>Mr. J</b>｜Skincare event','<b>Ms. C</b>｜Brightening class','<b>Mr. G</b>｜Brightening class','<b>Ms. H</b>｜Summer skin &amp; anti-glycation class']],
- ['.more summary','See more reviews'],
+ ['.vtag',['Came all the way from Kinmen','No sales pressure','Each side looked different','First time joining','Practical beauty tips','Brighter skin','Great for guys too','Second visit','No need to press so hard']],
+ ['.vq',['My skin used to be too dry; after the class <mark>it\'s much better hydrated</mark>. The whole session was relaxing and comfortable, and good things are meant to be shared with friends.',
+  'I never knew I should properly remove makeup and do skincare once I got home; now I do. <mark>The whole process was comfortable and thoughtful</mark>, with no pressure at all. You can feel how the products work and decide for yourself.',
+  'What struck me most: after retinol and massage, <mark>the two sides of my face looked different</mark>. My contours showed and my smile lines softened. I\'ll recommend it to friends: little money, the best results.',
+  'I learned lots of new skincare tips and got to know my skin better. The teacher explained everything carefully, and <mark>the beauticians looked after each of us so attentively</mark>. I\'ll bring friends next time.',
+  'I learned so many practical beauty tips, and the teachers generously let us try lots of the latest natural products. <mark>I came out looking prettier and so happy</mark>. I\'ll be back!',
+  'My skin was a bit dull, and after the whole routine <mark>it looked brighter</mark>. I also learned how to care for my skin after late nights. I\'d love to come again and bring friends.',
+  'After the skincare, <mark>my skin felt really smooth and bouncy</mark>. Spending the same money and applying products at random at home is nothing like learning the right steps here.',
+  'I usually don\'t do skincare, but I care how others see me, so I want to bring my guy friends to learn. <mark>Beyond skincare, it\'s great value</mark>: they cover care inside and out.',
+  'After makeup removal, mask and lotion, <mark>my right side felt super smooth</mark> while the untreated left side felt rougher. Turns out you don\'t need to press hard; a light touch is enough.']],
+ ['.vname',['<b>Ms. K from Kinmen</b>｜Beauty experience class','<b>Ms. B</b>｜Beauty experience class','<b>Ms. D</b>｜Beauty experience class','<b>Ms. A</b>｜Beauty experience class','<b>Ms. F</b>｜Beauty experience class','<b>Ms. E</b>｜Beauty experience class','<b>Mr. M</b>｜Beauty experience class','<b>Mr. N</b>｜Beauty experience class','<b>Mr. P</b>｜Beauty experience class']],
+ ['.vhint','← Swipe for more videos →'],
+ ['.more summary',['See more video reviews','See more reviews']],
  ['#book .issue span','Dates &amp; booking'],
  ['#book h2','Pick a date,<br>then DM RuRu to book'],
  ['#book .oneline','Classes are in Nangang, Taipei; the exact address is sent once you\'re confirmed. 4–8 people per class.'],
