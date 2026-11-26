@@ -414,7 +414,9 @@ b sup{font-family:var(--en);font-style:italic;font-weight:500;font-size:.62em;co
 .book-left{grid-column:1/7}
 .book-right{grid-column:7/13;background:var(--paper);border:1px solid var(--line);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column}
 .book-right .dm{margin-top:auto}
-.book-right .confirm{margin-bottom:18px}
+.book-right .confirm{margin-bottom:22px}
+.book-right .bk-flow{margin-top:auto;margin-bottom:22px}
+.book-right .bk-info{margin-top:auto !important;margin-bottom:26px}
 .bk-h{font-size:13px;letter-spacing:.16em;color:var(--soft);margin-bottom:12px}
 .bk-flow{padding-top:20px;border-top:1px solid var(--line)}
 .bk-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;counter-reset:none}
@@ -438,6 +440,9 @@ legend{font-size:13px;letter-spacing:.16em;color:var(--soft);margin-bottom:12px;
 .opt .d{font-family:var(--display);font-weight:900;font-size:19px}
 .opt .t{font-size:15px}
 .opt .m{grid-column:1/-1;font-size:13px;color:var(--soft)}
+.hottag{grid-column:1/-1;justify-self:start;font-size:11px;letter-spacing:.12em;background:var(--apricot-deep);color:#fff;padding:2px 8px;margin:4px 0 2px}
+.opt.special .box{background:linear-gradient(135deg,#fff,var(--peach) 140%)}
+.opt.special .m{color:var(--apricot-deep);font-weight:700}
 .viptag{grid-column:1/-1;justify-self:start;font-size:11px;letter-spacing:.12em;background:var(--ink);color:var(--pearl);padding:2px 8px;margin:4px 0 2px}
 .opt .chk{grid-row:1/3;grid-column:2;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;transition:all .25s}
 .opt input:checked + .box{border-color:var(--ink);background:#fff}
@@ -881,12 +886,18 @@ footer{background:var(--ink);color:var(--pearl);padding:clamp(56px,6vw,80px) 0 c
 </div>
 
 <script>
-/* 每月更新場次：只要改這裡。vip:true 的場次會顯示為「VIP 專屬」，不能選擇報名。 */
+/* 每月更新場次：只要改這裡。vip:true 的場次會顯示為「VIP 專屬」，不能選擇報名。
+   特別場次可加 title（場次名稱）、note（備註）、badge（標籤，例如即將額滿），以及 en 英文版。 */
 const SESSIONS=[
+  {date:'11/27（五）',time:'晚上 7:30–9:30',title:'暖冬美肌派對',note:'11 月最後一場',badge:'即將額滿',en:{title:'Winter Glow Party',note:'Last class in November',badge:'Almost full'}},
   {date:'12/11（五）',time:'晚上 7:30–9:30'},
   {date:'12/19（六）',time:'下午 2:00–4:00',vip:true},
   {date:'12/27（日）',time:'下午 2:00–4:00'}
 ];
+/* 過期場次自動隱藏（隔天就不顯示） */
+(function(){const now=new Date();for(let i=SESSIONS.length-1;i>=0;i--){const m=SESSIONS[i].date.match(/^(\d+)\/(\d+)/);if(!m)continue;
+  let y=now.getFullYear();const mo=+m[1];if(mo<now.getMonth()+1-6)y++;else if(mo>now.getMonth()+1+6)y--;
+  if(new Date(y,mo-1,+m[2],23,59,59)<now)SESSIONS.splice(i,1);}})();
 const PLACE='台北市南港區';
 /* 每月主題：只要改這裡（不需要主題時把 name 留空 ''） */
 const THEME={
@@ -907,9 +918,9 @@ function sessDate(s){
 }
 /* 預約訊息：純函式，方便測試 */
 function bookingMessage(s,ppl,concerns){
-  if(LANG==='en')return 'Hi RuRu, I\'d like to book the '+(THEME.name?'"'+THEME.en.name+'" ':'')+'beauty class on '+sessDate(s)+' for '+ppl+(ppl=='1'?' person':' people')+'. Are there spots left?'
+  if(LANG==='en')return 'Hi RuRu, I\'d like to book the '+(s.title?'"'+(s.en?s.en.title:s.title)+'" ':THEME.name?'"'+THEME.en.name+'" ':'')+'beauty class on '+sessDate(s)+' for '+ppl+(ppl=='1'?' person':' people')+'. Are there spots left?'
     +(concerns&&concerns.length?' The skincare topics I most want to learn about: '+concerns.join(', ')+'.':'');
-  return '嗨 RuRu，我想預約 '+s.date+s.time+' 的'+(THEME.name?'「'+THEME.name+'」':'')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
+  return '嗨 RuRu，我想預約 '+s.date+s.time+' 的'+(s.title?'「'+s.title+'」':THEME.name?'「'+THEME.name+'」':'')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
     +(concerns&&concerns.length?'我最想了解的保養問題：'+concerns.join('、')+'。':'');
 }
 
@@ -948,7 +959,10 @@ function bookingMessage(s,ppl,concerns){
       l.innerHTML='<input type="radio" name="sess"><span class="box"><span class="d"></span><span class="chk"></span><span class="m"></span></span>';
       const inp=l.querySelector('input');inp.value=i;if(i===(SESSIONS[ci]&&!SESSIONS[ci].vip?ci:first))inp.checked=true;
       l.querySelector('.d').textContent=sessDate(s);
-      l.querySelector('.m').textContent=en?PLACE_EN:PLACE;
+      const tt=en&&s.en?s.en:s;
+      if(s.badge){const b=document.createElement('span');b.className='hottag';b.textContent=tt.badge;l.querySelector('.box').insertBefore(b,l.querySelector('.m'));}
+      l.querySelector('.m').textContent=[tt.note,tt.title,en?PLACE_EN:PLACE].filter(Boolean).join('｜');
+      if(s.title)l.classList.add('special');
       list.appendChild(l);
     });
   }
