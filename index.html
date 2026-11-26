@@ -454,6 +454,8 @@ legend{font-size:13px;letter-spacing:.16em;color:var(--soft);margin-bottom:12px;
 .vip .tag{grid-row:2;grid-column:1;justify-self:start;font-size:11px;letter-spacing:.14em;background:var(--ink);color:var(--pearl);padding:2px 8px}
 .vip .m{grid-column:1/-1;font-size:13px}
 .vip a{color:var(--apricot-deep);font-weight:700}
+.vip.full .d{text-decoration:line-through;text-decoration-thickness:1px}
+.vip.full .tag{background:var(--soft)}
 .ppl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ppl .box{grid-template-columns:1fr auto}
 .ppl .d{font-size:17px}
@@ -894,17 +896,29 @@ const SESSIONS=[
   {date:'12/19（六）',time:'下午 2:00–4:00',vip:true},
   {date:'12/27（日）',time:'下午 2:00–4:00'}
 ];
-/* 過期場次自動隱藏（隔天就不顯示） */
-(function(){const now=new Date();for(let i=SESSIONS.length-1;i>=0;i--){const m=SESSIONS[i].date.match(/^(\d+)\/(\d+)/);if(!m)continue;
-  let y=now.getFullYear();const mo=+m[1];if(mo<now.getMonth()+1-6)y++;else if(mo>now.getMonth()+1+6)y--;
-  if(new Date(y,mo-1,+m[2],23,59,59)<now)SESSIONS.splice(i,1);}})();
+/* 過期場次：同一個月內顯示「已額滿」且不能選；上個月以前的自動隱藏。也可以手動加 full:true 標成已額滿 */
+(function(){const now=new Date(),cm=now.getMonth()+1;for(let i=SESSIONS.length-1;i>=0;i--){const m=SESSIONS[i].date.match(/^(\d+)\/(\d+)/);if(!m)continue;
+  let y=now.getFullYear();const mo=+m[1];if(mo<cm-6)y++;else if(mo>cm+6)y--;
+  if(new Date(y,mo-1,+m[2],23,59,59)<now){if(y===now.getFullYear()&&mo===cm)SESSIONS[i].full=true;else SESSIONS.splice(i,1);}}})();
 const PLACE='台北市南港區';
-/* 每月主題：只要改這裡（不需要主題時把 name 留空 ''） */
-const THEME={
-  month:'12 月', name:'暖冬抗老',
-  desc:'天氣變冷，肌膚容易乾燥、細紋更明顯。這個月一起學冬季保濕與抗老的保養順序。',
-  en:{month:'December', name:'Winter Anti-Aging', desc:'Cold weather leaves skin drier and fine lines more visible. This month, learn a winter routine for hydration and anti-aging.'}
+/* 每月主題：用月份當編號，只要改這裡。
+   網站會顯示「本月」主題；當本月只剩一場（含以下）可報名，而且下個月的主題已經填好時，自動換成下個月的主題。 */
+const THEMES={
+  12:{name:'暖冬抗老',
+      desc:'天氣變冷，肌膚容易乾燥、細紋更明顯。這個月一起學冬季保濕與抗老的保養順序。',
+      en:{name:'Winter Anti-Aging', desc:'Cold weather leaves skin drier and fine lines more visible. This month, learn a winter routine for hydration and anti-aging.'}},
+  1:null  /* 1 月主題：確定後填入，格式同上 */
 };
+const MONTH_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function sessMonth(s){const m=s.date.match(/^(\d+)\//);return m?+m[1]:0;}
+function themeFor(mo){return THEMES[mo]&&THEMES[mo].name?THEMES[mo]:null;}
+/* 目前要顯示哪個月的主題 */
+function activeThemeMonth(){
+  const cm=new Date().getMonth()+1,nm=cm%12+1;
+  const left=SESSIONS.filter(x=>sessMonth(x)===cm&&!x.vip&&!x.full).length;
+  if(left<=1&&themeFor(nm))return nm;
+  return themeFor(cm)?cm:(themeFor(nm)?nm:0);
+}
 
 /* 英文版自動換算日期，每月只需改上面的 SESSIONS */
 let LANG='zh';
@@ -918,9 +932,9 @@ function sessDate(s){
 }
 /* 預約訊息：純函式，方便測試 */
 function bookingMessage(s,ppl,concerns){
-  if(LANG==='en')return 'Hi RuRu, I\'d like to book the '+(s.title?'"'+(s.en?s.en.title:s.title)+'" ':THEME.name?'"'+THEME.en.name+'" ':'')+'beauty class on '+sessDate(s)+' for '+ppl+(ppl=='1'?' person':' people')+'. Are there spots left?'
+  if(LANG==='en')return 'Hi RuRu, I\'d like to book the '+(s.title?'"'+(s.en?s.en.title:s.title)+'" ':themeFor(sessMonth(s))?'"'+themeFor(sessMonth(s)).en.name+'" ':'')+'beauty class on '+sessDate(s)+' for '+ppl+(ppl=='1'?' person':' people')+'. Are there spots left?'
     +(concerns&&concerns.length?' The skincare topics I most want to learn about: '+concerns.join(', ')+'.':'');
-  return '嗨 RuRu，我想預約 '+s.date+s.time+' 的'+(s.title?'「'+s.title+'」':THEME.name?'「'+THEME.name+'」':'')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
+  return '嗨 RuRu，我想預約 '+s.date+s.time+' 的'+(s.title?'「'+s.title+'」':themeFor(sessMonth(s))?'「'+themeFor(sessMonth(s)).name+'」':'')+'美容體驗班，共 '+ppl+' 人，請問還有名額嗎？'
     +(concerns&&concerns.length?'我最想了解的保養問題：'+concerns.join('、')+'。':'');
 }
 
@@ -931,12 +945,14 @@ function bookingMessage(s,ppl,concerns){
   /* 場次選項 */
   const list=$('sessList');
   function renderTheme(){
-    const en=LANG==='en',t=en?THEME.en:THEME,pill=$('themePill'),card=$('themeCard');
-    if(!THEME.name){pill.hidden=true;card.hidden=true;return;}
+    const en=LANG==='en',pill=$('themePill'),card=$('themeCard'),mo=activeThemeMonth();
+    if(!mo){pill.hidden=true;card.hidden=true;return;}
+    const T=THEMES[mo],t=en?T.en:T;
     pill.hidden=false;card.hidden=false;
-    pill.querySelector('em').textContent=en?t.month+' theme':t.month+'主題';
+    const label=en?MONTH_EN[mo-1]+' theme':mo+' 月主題';
+    pill.querySelector('em').textContent=label;
     pill.querySelector('b').textContent=t.name;
-    card.querySelector('.tc-k').textContent=en?t.month+' theme':t.month+'主題';
+    card.querySelector('.tc-k').textContent=label;
     card.querySelector('.tc-n').textContent=t.name;
     card.querySelector('.tc-d').textContent=t.desc;
   }
@@ -944,9 +960,18 @@ function bookingMessage(s,ppl,concerns){
     renderTheme();
     const cur=document.querySelector('input[name="sess"]:checked');const ci=cur?+cur.value:0;
     list.innerHTML='';
-    const first=SESSIONS.findIndex(x=>!x.vip);
+    const first=SESSIONS.findIndex(x=>!x.vip&&!x.full);
     SESSIONS.forEach((s,i)=>{
       const en=LANG==='en';
+      if(s.full){
+        const tt=en&&s.en?s.en:s;
+        const v=document.createElement('div');v.className='vip full';v.setAttribute('aria-disabled','true');
+        v.innerHTML='<span class="d"></span><span class="tag"></span><span class="m"></span>';
+        v.querySelector('.d').textContent=sessDate(s);
+        v.querySelector('.tag').textContent=en?'Full':'已額滿';
+        v.querySelector('.m').textContent=[tt.note,tt.title,en?PLACE_EN:PLACE].filter(Boolean).join('｜');
+        list.appendChild(v);return;
+      }
       if(s.vip){
         const v=document.createElement('div');v.className='vip';v.setAttribute('aria-disabled','true');
         v.innerHTML='<span class="d"></span><span class="tag"></span><span class="m"></span>';
@@ -957,7 +982,7 @@ function bookingMessage(s,ppl,concerns){
       }
       const l=document.createElement('label');l.className='opt';
       l.innerHTML='<input type="radio" name="sess"><span class="box"><span class="d"></span><span class="chk"></span><span class="m"></span></span>';
-      const inp=l.querySelector('input');inp.value=i;if(i===(SESSIONS[ci]&&!SESSIONS[ci].vip?ci:first))inp.checked=true;
+      const inp=l.querySelector('input');inp.value=i;if(i===(SESSIONS[ci]&&!SESSIONS[ci].vip&&!SESSIONS[ci].full?ci:first))inp.checked=true;
       l.querySelector('.d').textContent=sessDate(s);
       const tt=en&&s.en?s.en:s;
       if(s.badge){const b=document.createElement('span');b.className='hottag';b.textContent=tt.badge;l.querySelector('.box').insertBefore(b,l.querySelector('.m'));}
