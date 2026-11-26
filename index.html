@@ -986,7 +986,15 @@ function bookingMessage(s,ppl,concerns){
       l.querySelector('.d').textContent=sessDate(s);
       const tt=en&&s.en?s.en:s;
       if(s.badge){const b=document.createElement('span');b.className='hottag';b.textContent=tt.badge;l.querySelector('.box').insertBefore(b,l.querySelector('.m'));}
-      l.querySelector('.m').textContent=[tt.note,tt.title,en?PLACE_EN:PLACE].filter(Boolean).join('｜');
+      let note=tt.note,title=tt.title;
+      /* 主題已換成下個月時，本月剩下的場次自動標示「X 月最後一場｜本月主題」 */
+      const smo=sessMonth(s),amo=activeThemeMonth();
+      if(!s.title&&amo&&smo!==amo&&smo===new Date().getMonth()+1&&themeFor(smo)){
+        note=en?'Last class in '+MONTH_EN[smo-1]:smo+' 月最後一場';
+        title=en?themeFor(smo).en.name:themeFor(smo).name;
+        l.classList.add('special');
+      }
+      l.querySelector('.m').textContent=[note,title,en?PLACE_EN:PLACE].filter(Boolean).join('｜');
       if(s.title)l.classList.add('special');
       list.appendChild(l);
     });
